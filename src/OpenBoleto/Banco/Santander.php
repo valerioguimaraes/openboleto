@@ -104,7 +104,9 @@ class Santander extends BoletoAbstract
      */
     protected function gerarNossoNumero()
     {
-        return self::zeroFill($this->getSequencial(), 13);
+        $nn = self::zeroFill($this->getSequencial(), 12);
+        $nn .='-' . self::modulo11($nn, 9)['digito'];
+        return $nn;
     }
 
     /**
@@ -116,7 +118,7 @@ class Santander extends BoletoAbstract
     public function getCampoLivre()
     {
         return '9' . self::zeroFill($this->getConta(), 7) .
-            $this->getNossoNumero() .
+            $this->getNossoNumero(false) .
             self::zeroFill($this->getIos(), 1) .
             self::zeroFill($this->getCarteira(), 3);
     }
